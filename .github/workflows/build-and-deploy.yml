@@ -13,12 +13,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and Push Docker Image
+      - name: Build Docker Image
+        run: |
+          docker build -t my-rails-app:latest .
+
+      - name: Tag Docker Image
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        run: |
+          docker tag my-rails-app:latest $DOCKERHUB_USERNAME/my-rails-app:latest
+
+      - name: Login And Push Image
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-
         run: |
-          docker build -t my-rails-app:latest .
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
           docker push $DOCKERHUB_USERNAME/my-rails-app:latest
+          
