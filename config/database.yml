@@ -5,9 +5,10 @@ default: &default
 
 development:
   <<: *default
-  database: <%= ENV.fetch("database_name") {  } %>
-  username: <%= ENV.fetch("database_user") {  } %>
-  port: <%= ENV.fetch("database_port") {  } %>
+  database: <%= ENV.fetch("database_name") {} %>
+  username: <%= ENV.fetch("database_user") {} %>
+  port: <%= ENV.fetch("database_port") {} %>
+  host: <%= ENV.fetch("database_host") {} %>
 
 #test:
 #  <<: *default
