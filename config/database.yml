@@ -1,0 +1,18 @@
+default: &default
+  adapter: jdbcpostgresql
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: <%= ENV.fetch("database_name") {  } %>
+  username: <%= ENV.fetch("database_user") {  } %>
+  port: <%= ENV.fetch("database_port") {  } %>
+
+#test:
+#  <<: *default
+#  database: db/test.sqlite3
+
+#production:
+#  <<: *default
+#  database: db/production.sqlite3
