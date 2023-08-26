@@ -21,7 +21,8 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
         run: |
-          docker tag my-rails-app:latest $DOCKERHUB_USERNAME/my-rails-app:latest
+          COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-7)  # Use first 7 characters of SHA
+          docker tag my-rails-app:latest $DOCKERHUB_USERNAME/my-rails-app:$COMMIT_HASH
 
       - name: Login And Push Image
         env:
@@ -29,5 +30,6 @@ jobs:
           DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
         run: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-          docker push $DOCKERHUB_USERNAME/my-rails-app:latest
+          COMMIT_HASH=$(echo $GITHUB_SHA | cut -c1-7)
+          docker push $DOCKERHUB_USERNAME/my-rails-app:$COMMIT_HASH
           
