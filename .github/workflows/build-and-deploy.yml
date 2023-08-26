@@ -1,27 +1,15 @@
-name: Build and Deploy Docker Image
-
-on:
-  push:
-    branches:
-      - main
-
 jobs:
-  build:
+  build_and_push:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Build Docker image
-      run: docker build -t my-rails-app:$GITHUB_SHA .
-      env:
-        DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-        DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
-    - name: Log in to Docker Hub (or other registry)
-      run: echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-
-    - name: Push Docker image
-      run: docker push $DOCKERHUB_USERNAME/my-rails-app:$GITHUB_SHA
-
-
+      - name: Build and Push Docker Image
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          docker build -t my-image:latest .
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          docker push $DOCKERHUB_USERNAME/my-image:latest
